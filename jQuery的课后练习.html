@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>jQuery</title>
+    <style>
+        div{
+            border: 1px solid green;
+        }
+    </style>
+</head>
+<body>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+    <div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    // console.log(typeof(jQuery))
+    // console.log($('li') );
+    // console.dir($('li').prototype);
+
+
+window.jQuery = function (nodeOrSelector) {
+    let nodes = {};
+    if (typeof nodeOrSelector === 'string') {
+        let temp = document.querySelectorAll(nodeOrSelector); //伪数组
+        for (let i = 0; i < temp.length; i++) {
+            nodes[i] = temp[i];
+        }
+        nodes.length = temp.length;
+    } else if (nodeOrSelector instanceof Node) {
+        nodes = {
+            0: nodeOrSelector,
+            length: 1
+        }
+    }
+    nodes.addClass = function (classes) {
+        for (let i = 0; i < nodes.length; i++) {
+            nodes[i].classList.add(classes);
+        }
+    }
+    nodes.setText = function (value) {
+        for (let i = 0; i < nodes.length; i++) {
+            nodes[i].textContent = value;
+        }
+    }
+    return nodes;
+}
+window.$ = jQuery
+
+var $div = $('div')
+$div.addClass('red') // 可将所有 div 的 class 添加一个 red
+$div.setText('hi') // 可将所有 div 的 textContent 变为 hi
+</script>
+</body>
+</html>

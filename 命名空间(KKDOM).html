@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>命名空间 & 重写this</title>
+    <style>
+    .red{
+    color: red;
+    }
+    .blue{
+    color: blue;
+    }
+    </style>
+</head>
+<body>
+    <ul>
+        <li id="item1">选项1</li>
+        <li id="item2">选项2</li>
+        <li id="item3">选项3</li>
+        <li id="item4">选项4</li>
+        <li id="item5">选项5</li>
+    </ul>
+</body>
+<script>
+// 命名空间
+window.kkdom = {};
+
+kkdom.getSiblings = function(node) {
+    var allChildren = node.parentNode.children;
+    var array = {
+        length: 0
+    }
+    for(let i = 0; i < allChildren.length; i++) {
+        if(allChildren[i] !== node) {
+            array[array.length] = allChildren[i];
+            array.length += 1;
+        }
+    }
+    console.log(array);
+    return array;
+}
+
+kkdom.addClass = function(node, classes) {
+    classes.forEach( (value) => node.classList.add(value));
+}
+
+kkdom.getSiblings(item3);
+kkdom.addClass(item3, ['a', 'b', 'c']);
+
+
+
+
+
+
+
+</script>
+</html>

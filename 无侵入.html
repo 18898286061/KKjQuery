@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>无侵入</title>
+    <style>
+    .blue {
+        color: blue;
+        }
+    .red {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <ul>
+        <li id="item1">选项1</li>
+        <li id="item2">选项2</li>
+        <li id="item3">选项3</li>
+        <li id="item4">选项4</li>
+        <li id="item5">选项5</li>
+    </ul>
+<script>
+// 「无侵入」
+window.KKjQuery = function(nodeOrSelector) {
+    let nodes = {};
+    if(typeof nodeOrSelector === 'string') {
+        let temp = document.querySelectorAll(nodeOrSelector); //伪数组
+        for (let i = 0; i < temp.length; i++) {
+            nodes[i] = temp[i];
+        }
+        nodes.length = temp.length;
+    } else if (nodeOrSelector instanceof Node) {
+        nodes = {
+            0:nodeOrSelector,
+            length: 1
+        }
+    }
+    nodes.addClass = function(classes) {
+        classes.forEach((value) => {
+            for(let i = 0; i < nodes.length; i++) {
+                if(classes[value]){
+                nodes[i].classList.add(value)
+                } else {
+                nodes[i].classList.remove(value)
+                }
+            }
+        })
+    };
+    nodes.getText = function() {
+        texts = [];
+        for(let i = 0; i < nodes.length; i++) {
+            texts.push(nodes[i].textContent);
+        }
+        return texts;
+    };
+    return nodes;
+}
+// 添加一个alias
+window.$ = KKjQuery;
+
+var kk = KKjQuery('ul > li');
+// var $kk = $('ul > li');
+// {
+//     0: li,
+//     1: li,
+//     2: li,
+//     3: li,
+//     4: li,
+//     length: 5,
+//     addClass: f,
+//     text: f
+// }
+kk.addClass(['blue']);
+console.log(kk.getText());
+kk[0].classList.add('red');    
+</script>
+</body>
+</html>
