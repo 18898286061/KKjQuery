@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>浮层事件3</title>
+    <style>
+        .wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .layer {
+            border: 1px solid red;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            white-space: nowrap;
+            padding: 10px;
+            margin-left: 10px;
+            background: #eee;
+            display: none;
+        }
+        .layer::before {
+            position: absolute;
+            right: 100%;
+            top: 5px;
+            border: 10px solid transparent;
+            border-right-color: red;
+            content: '';
+        }
+        .layer::after {
+            position: absolute;
+            right: 100%;
+            top: 5px;
+            border: 10px solid transparent;
+            border-right-color: #eee;
+            content: '';
+            margin-right: -1px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 点击别处消失浮层 -->
+<div class="wrapper" id="wrapper">
+    <button id="click">Click Hrer</button>
+    <div id="layer" class="layer"">
+        <input type="checkbox" name="" id="">I am float layer
+    </div>
+</div>
+
+<script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+<script>
+// click.addEventListener('click',function () {
+//     layer.style.display='block';
+// })
+// document.addEventListener('click',function(){
+//     layer.style.display='none';
+// },true)
+
+//demo version 
+//实现点击click,显示浮层，点击别处隐藏浮层，但这里别处包括了浮层本身，而且点击click不能隐藏浮层
+// click.addEventListener('click',function () {
+//     layer.style.display='block';
+// })
+// wrapper.addEventListener('click',function(e){
+//     e.stopPropagation();
+// })
+// document.addEventListener('click',function(){
+//     layer.style.display='none';
+// })
+
+
+//方方工作第一年的方案，除基础效果外，点击浮层 浮层不会消失了
+// $('#click').on('click', function () {
+//     console.log(11)
+//     $('#layer').show();
+//     //节省内存方案，只在浮层显示之后再创建一次性的监听
+//     $(document).one('click', function () {
+//         console.log(22);
+//         $('#layer').hide();
+//     })
+// })
+// //如果注释掉下面这段，还是犯了和最开始一样的错误，
+// //即给按钮添加完click事件后，由于冒泡机制的作用，
+// //在给document对象添加了监听事件的同时，就立即执行了事件监听的函数
+// $('#wrapper').on('click', function (e) {
+//     e.stopPropagation();
+// })
+
+
+
+
+// $('#click').on('click', function () {
+//     $('#layer').show();
+//     console.log('show');
+//     setTimeout(() => {
+//         console.log('添加one click')
+//         console.log('****************')
+//         $(document).one('click',function(){
+//             console.log('我觉得这里不会执行');
+//             $('#layer').hide();
+//             console.log('----------------')
+//         })
+//     }, 0);
+// })
+
+// //所以我们采用了settimeout是异步的特性，会在捕获冒泡机制之后执行
+// $(document).on('click',function(){
+//     console.log('clicK事件走到了document');
+// })
+//但是会有一个bug,如果一直点击click来实现show hide
+//在第二次点击click的时候，因为留有上一次保存的hide(),
+//所以这一次的点击会让show 和 hide()同时进行，即又成功地实现了第一次的bug
+
+$('#click').on('click',function () {
+    $('#layer').toggle();
+})
+$('#wrapper').on('click',function (e) {
+    e.stopPropagation();
+})
+$(document).on('click',function () {  
+    $('#layer').hide();
+})
+</script>
+</body>
+</html>
