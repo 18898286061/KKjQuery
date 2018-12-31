@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>自己简单的实现jQuery的Ajax函数库 (Promise)</title>
+</head>
+<body>
+    <button id="button">Click me</button>
+
+<script>
+//  满足 Promise 规则
+window.jQuery = function(nodeOrSelector) {
+    let nodes = {};
+    nodes.addClass = function() {};
+    nodes.html = function() {};
+    return nodes;
+}
+window.$ = window.jQuery;
+
+// window.Promise = function(fn) {
+//     // ...
+//     return {
+//         then: function(){}
+//     }
+// }
+
+window.jQuery.ajax = function({url, method, body, headers}) {
+    return new Promise(function(resolve, reject) {
+        let request = new XMLHttpRequest();
+        request.open(method, url) // 配置request
+        for(let key in headers) {
+            let value = headers[key];
+            request.setRequestHeader(key, value);
+        }
+        request.onreadystatechange = () => {
+            if(request.readyState === 4) {
+                if(request.statu >= 200 && request.res) {
+                    resolve.call(undefined, request.responseText);
+                } else if (request.status >= 400) {
+                    reject.call(undefined, request);
+                }
+            }
+        }
+        request.send(body);
+    })
+}
+
+button.addEventListener('click', (e)=> {
+    let promise = window.jQuery.ajax({
+        url: '/xxx',
+        method: 'get',
+        headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+            'kaikai': '21'
+        }
+    })
+    promise.then(
+    (text)=>{console.log(text)},
+    (request)=>{console.log(request)}
+    )
+})
+
+// window.jQuery = function(nodeOrSelector) {
+//     let nodes = {};
+//     nodes.addClass = function() {};
+//     nodes.html = function() {};
+//     return nodes;
+// }
+// window.$ = window.jQuery;
+
+// window.jQuery.ajax = function({url, method, body, successFn, failFn, headers}) {
+//     let request = new XMLHttpRequest();
+//     request.open(method, url) // 配置request
+//     for(let key in headers) {
+//         let value = headers[key];
+//         request.setRequestHeader(key, value);
+//     }
+//     request.onreadystatechange = () => {
+//         if(request.readyState === 4) {
+//             if(request.statu >= 200 && request.res) {
+//                 successFn.call(undefined, request.responseText);
+//             } else if (request.status >= 400) {
+//                 failFn.call(undefined, request);
+//             }
+//         }
+//     }
+//     request.send(body);
+// }
+
+// function f1(responseText) {};
+// function f2(responseText) {};
+
+// myButton.addEventListener('click', (e)=> {
+//     window.jQuery.ajax({
+//         url: './xxx',
+//         method: 'get',
+//         headers: {
+//             'content-type': 'application/x-www-form-urlencoded',
+//             'kaikai': '21'
+//         },
+//         successFn: (x)=> {
+//             f1.call(undefined, x);
+//             f2.call(undefined, x);
+//         },
+//         failFn: (x)=> {
+//             console.log(x);
+//             console.log(x.status);
+//             console.log(x.responseText);
+//         }
+//     })
+// })
+
+
+</script>
+</body>
+</html>
